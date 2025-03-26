@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FirstTrustBank - Community Banking Services</title>
-    <link rel="stylesheet" href="./styles.css" />
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for Icons -->
@@ -1217,27 +1217,50 @@
       });
 
       // Hamburger Menu Toggle
-      const hamburgerButton = document.getElementById("hamburgerButton");
-      const navLinksMobile = document.getElementById("navLinksMobile");
-      let isMenuOpen = false;
+const hamburgerButton = document.getElementById("hamburgerButton");
+const navLinksMobile = document.getElementById("navLinksMobile");
+let isMenuOpen = false;
 
-      hamburgerButton.addEventListener("click", () => {
-        isMenuOpen = !isMenuOpen;
-        hamburgerButton.setAttribute("aria-expanded", isMenuOpen.toString());
-      
-        if (isMenuOpen) {
-          navLinksMobile.classList.add("open");
-          navLinksMobile.classList.remove("closed");
-          hamburgerButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
-          document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
-        } else {
-          navLinksMobile.classList.remove("open");
-          navLinksMobile.classList.add("closed");
-          hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-          document.body.style.overflow = ""; // Restore scrolling
-        }
-      });
+hamburgerButton.addEventListener("click", () => {
+  isMenuOpen = !isMenuOpen;
+  hamburgerButton.setAttribute("aria-expanded", isMenuOpen.toString());
 
+  if (isMenuOpen) {
+    navLinksMobile.classList.add("open");
+    hamburgerButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+    document.body.style.overflow = "hidden"; // Prevent scrolling
+  } else {
+    navLinksMobile.classList.remove("open");
+    hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+    document.body.style.overflow = ""; // Restore scrolling
+  }
+});
+
+// Close menu when clicking outside
+document.addEventListener("click", (e) => {
+  if (
+    isMenuOpen &&
+    !navLinksMobile.contains(e.target) &&
+    !hamburgerButton.contains(e.target)
+  ) {
+    isMenuOpen = false;
+    navLinksMobile.classList.remove("open");
+    hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+    hamburgerButton.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+});
+
+// Close menu when clicking a link
+document.querySelectorAll("#navLinksMobile a").forEach((link) => {
+  link.addEventListener("click", () => {
+    isMenuOpen = false;
+    navLinksMobile.classList.remove("open");
+    hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+    hamburgerButton.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  });
+});
       // Close menu when clicking outside
       document.addEventListener("click", (e) => {
         if (
