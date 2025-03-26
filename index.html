@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FirstTrustBank - Community Banking Services</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <!-- Custom Styles -->
+    <style>
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(0.95);
+        }
+      }
+
+      @keyframes slideIn {
+        0% {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        0% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+      }
+
+      @keyframes notificationSlideIn {
+        0% {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .animate-fadeIn {
+        animation: fadeIn 1s ease-out forwards;
+      }
+      .animate-bounce {
+        animation: bounce 0.3s ease;
+      }
+      .animate-slideIn {
+        animation: slideIn 0.5s ease-out forwards;
+      }
+      .animate-fadeOut {
+        animation: fadeOut 0.5s ease-out forwards;
+      }
+      .animate-notificationSlideIn {
+        animation: notificationSlideIn 0.5s ease-out forwards;
+      }
+
+      /* Hamburger Menu Transition */
+      .nav-links {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .nav-links.open {
+        transform: translateX(0);
+      }
+
+      .nav-links.closed {
+        transform: translateX(-100%);
+      }
+
+      /* Neon Shadow for Logo */
+      .neon-shadow {
+        text-shadow: 0 0 10px rgba(30, 58, 138, 0.8),
+          0 0 20px rgba(30, 58, 138, 0.6), 0 0 30px rgba(30, 58, 138, 0.4);
+      }
+
+      /* Contact Button */
+      .contact-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 50;
+      }
+
+      /* Contact Form Overlay */
+      .contact-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .contact-form-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+      }
+
+      /* Cookie Consent Popup */
+      .cookie-consent {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 60;
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .cookie-consent {
+          left: auto;
+          width: 400px;
+        }
+      }
+
+      /* Feature Card Hover Effects */
+      .feature-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .feature-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Dark Mode Toggle Button */
+      .dark-mode-toggle {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 50;
+      }
+
+      /* Notification System */
+      .notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 70;
+        width: 300px;
+      }
+
+      .notification {
+        background: #1e3a8a; /* bg-blue-900 */
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .notification-close {
+        cursor: pointer;
+        font-size: 1.25rem;
+      }
+
+      /* Live Chat Button */
+      .live-chat-button {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        z-index: 50;
+      }
+
+      /* Live Chat Window */
+      .live-chat-window {
+        position: fixed;
+        bottom: 140px;
+        right: 20px;
+        width: 300px;
+        height: 400px;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        z-index: 50;
+      }
+
+      .live-chat-header {
+        background: #1e3a8a;
+        color: white;
+        padding: 1rem;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .live-chat-body {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        background: #f3f4f6;
+      }
+
+      .live-chat-footer {
+        padding: 1rem;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .chat-message {
+        margin-bottom: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+      }
+
+      .chat-message.user {
+        background: #1e3a8a;
+        color: white;
+        align-self: flex-end;
+        margin-left: auto;
+        max-width: 70%;
+      }
+
+      .chat-message.bot {
+        background: #e5e7eb;
+        color: #1f2937;
+        align-self: flex-start;
+        max-width: 70%;
+      }
+
+      /* Google Maps */
+      #map {
+        height: 300px;
+        width: 100%;
+        border-radius: 0.5rem;
+      }
+
+      /* Navbar Styles */
+      .top-bar {
+        background: #1e3a8a;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .main-nav {
+        background: #1e3a8a;
+        color: white;
+        padding: 1rem 1.5rem;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+      }
+
+      .nav-links-desktop a {
+        position: relative;
+        padding-bottom: 0.25rem;
+      }
+
+      .nav-links-desktop a:hover::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: white;
+      }
+
+      .online-banking-btn {
+        background: #facc15; /* Yellow color from FNBT */
+        color: #1f2937;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        font-weight: 600;
+        transition: background 0.3s ease;
+      }
+
+      .online-banking-btn:hover {
+        background: #eab308;
+      }
+
+      /* Responsive Navbar */
+      @media (max-width: 768px) {
+        .nav-links-desktop {
+          display: none;
+        }
+
+        .top-bar .social-icons {
+          display: none;
+        }
+
+        .top-bar .contact-number {
+          font-size: 0.8rem;
+        }
+
+        .main-nav {
+          padding: 0.5rem 1rem;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .hamburger-button {
+          display: none;
+        }
+
+        .nav-links-mobile {
+          display: none;
+        }
+      }
+
+      /* Light Mode Styles (Default) */
+      body {
+        background-color: #ffffff;
+        color: #1f2937; /* text-gray-900 */
+      }
+
+      .gradient-section {
+        background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+      }
+
+      .contact-form-container {
+        background: white;
+      }
+
+      .cookie-consent {
+        background: white;
+        color: #1f2937;
+      }
+
+      .feature-card {
+        background: #1e3a8a; /* bg-blue-900 */
+        color: white;
+      }
+
+      .live-chat-window {
+        background: white;
+      }
+
+      /* Dark Mode Styles */
+      body.dark {
+        background-color: #1a202c;
+        color: #e2e8f0;
+      }
+
+      body.dark .gradient-section {
+        background: linear-gradient(180deg, #2d3748 0%, #4a5568 100%);
+      }
+
+      body.dark .bg-white {
+        background-color: #2d3748;
+      }
+
+      body.dark .text-gray-900 {
+        color: #e2e8f0;
+      }
+
+      body.dark .text-gray-600 {
+        color: #a0aec0;
+      }
+
+      body.dark .bg-gray-100 {
+        background-color: #4a5568;
+      }
+
+      body.dark .contact-form-container {
+        background: #2d3748;
+      }
+
+      body.dark .cookie-consent {
+        background: #2d3748;
+        color: #e2e8f0;
+      }
+
+      body.dark .feature-card {
+        background: #3b82f6; /* bg-blue-500 */
+      }
+
+      body.dark .neon-shadow {
+        text-shadow: 0 0 10px rgba(37, 99, 235, 0.8),
+          0 0 20px rgba(37, 99, 235, 0.6), 0 0 30px rgba(37, 99, 235, 0.4);
+      }
+
+      body.dark input,
+      body.dark textarea,
+      body.dark select {
+        color: #e2e8f0;
+        border-color: #718096;
+      }
+
+      body.dark input::placeholder,
+      body.dark textarea::placeholder {
+        color: #a0aec0;
+      }
+
+      body.dark .live-chat-window {
+        background: #2d3748;
+      }
+
+      body.dark .live-chat-header {
+        background: #3b82f6;
+      }
+
+      body.dark .live-chat-body {
+        background: #4a5568;
+      }
+
+      body.dark .chat-message.bot {
+        background: #718096;
+        color: #e2e8f0;
+      }
+
+      body.dark .notification {
+        background: #3b82f6; /* Adjusted for dark mode */
+      }
+
+      body.dark #findLocation {
+        background: #3b82f6; /* Adjusted for dark mode */
+      }
+
+      body.dark #findLocation:hover {
+        background: #2563eb;
+      }
+
+      body.dark .top-bar,
+      body.dark .main-nav {
+        background: #2d3748;
+      }
+
+      body.dark .online-banking-btn {
+        background: #facc15;
+        color: #1f2937;
+      }
+
+      body.dark .online-banking-btn:hover {
+        background: #eab308;
+      }
+    </style>
+  </head>
+  <body class="text-gray-900">
+    <!-- Dark Mode Toggle Button -->
+    <button
+      id="darkModeToggle"
+      class="dark-mode-toggle bg-gray-200 text-gray-900 p-3 rounded-full shadow-lg hover:bg-gray-300 transition-all duration-300"
+    >
+      <i class="fas fa-moon text-xl"></i>
+    </button>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Cookie Consent Popup -->
+    <div id="cookieConsent" class="cookie-consent">
+      <p class="text-gray-900 mb-4">
+        We use cookies to improve your experience on our site. By continuing,
+        you agree to our use of cookies.
+      </p>
+      <div class="flex justify-end space-x-4">
+        <a href="#privacy" class="text-blue-900 hover:underline">Learn More</a>
+        <button
+          id="acceptCookies"
+          class="bg-blue-900 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-800 transition-all duration-300"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar flex justify-between items-center">
+      <div class="contact-number">Contact Us at 800-667-4401</div>
+      <div class="flex items-center space-x-4">
+        <div class="social-icons flex space-x-2">
+          <a href="#" class="text-white hover:text-gray-300"
+            ><i class="fas fa-blog"></i
+          ></a>
+          <a href="https://facebook.com" class="text-white hover:text-gray-300"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="https://twitter.com" class="text-white hover:text-gray-300"
+            ><i class="fab fa-x-twitter"></i
+          ></a>
+          <a href="https://linkedin.com" class="text-white hover:text-gray-300"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a href="https://instagram.com" class="text-white hover:text-gray-300"
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
+        <a href="#online-banking" class="online-banking-btn">Online Banking</a>
+      </div>
+    </div>
+
+    <!-- Main Navbar -->
+    <nav class="main-nav flex justify-between items-center">
+      <div class="flex items-center space-x-4">
+        <div class="text-2xl font-bold text-white-900 neon-shadow">
+          FirstTrustBank
+        </div>
+      </div>
+      <button
+        id="hamburgerButton"
+        class="hamburger-button text-white focus:outline-none"
+        aria-expanded="false"
+        aria-controls="navLinksMobile"
+      >
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
+      <div class="nav-links-desktop flex items-center space-x-6">
+        <a href="#personal" class="text-white hover:text-gray-300"
+          >Personal <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#business" class="text-white hover:text-gray-300"
+          >Business <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#wealth" class="text-white hover:text-gray-300"
+          >Wealth <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#sound-advice" class="text-white hover:text-gray-300"
+          >Sound Advice <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#about-us" class="text-white hover:text-gray-300"
+          >About Us <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <div class="border-l border-gray-400 h-6"></div>
+        <a href="#open-account" class="text-white hover:text-gray-300"
+          >Open Account</a
+        >
+        <a href="#apply-loan" class="text-white hover:text-gray-300"
+          >Apply for Loan</a
+        >
+        <a href="#locations" class="text-white hover:text-gray-300"
+          >Locations</a
+        >
+        <a href="#search" class="text-white hover:text-gray-300"
+          ><i class="fas fa-search"></i
+        ></a>
+      </div>
+      <div
+        id="navLinksMobile"
+        class="nav-links-mobile nav-links closed absolute top-[120px] left-0 w-64 bg-blue-900 flex flex-col space-y-4 p-6 transform"
+      >
+        <a href="#personal" class="text-white hover:text-gray-300"
+          >Personal <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#business" class="text-white hover:text-gray-300"
+          >Business <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#wealth" class="text-white hover:text-gray-300"
+          >Wealth <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#sound-advice" class="text-white hover:text-gray-300"
+          >Sound Advice <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#about-us" class="text-white hover:text-gray-300"
+          >About Us <i class="fas fa-chevron-down text-xs ml-1"></i
+        ></a>
+        <a href="#open-account" class="text-white hover:text-gray-300"
+          >Open Account</a
+        >
+        <a href="#apply-loan" class="text-white hover:text-gray-300"
+          >Apply for Loan</a
+        >
+        <a href="#locations" class="text-white hover:text-gray-300"
+          >Locations</a
+        >
+        <a href="#search" class="text-white hover:text-gray-300"
+          ><i class="fas fa-search"></i> Search</a
+        >
+      </div>
+    </nav>
+
+    <!-- Contact Button -->
+    <button
+      id="contactButton"
+      class="contact-button bg-blue-900 text-white p-4 rounded-full shadow-lg hover:bg-blue-800 transition-all duration-300"
+    >
+      <i class="fas fa-envelope text-xl"></i>
+    </button>
+
+    <!-- Contact Form Overlay -->
+    <div id="contactOverlay" class="contact-overlay">
+      <div class="contact-form-container">
+        <h3 class="text-2xl font-semibold mb-4">Contact Us</h3>
+        <form id="contactForm">
+          <div class="mb-4">
+            <input
+              type="text"
+              id="contactName"
+              placeholder="Your Name"
+              class="w-full p-3 bg-gray-200 text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <input
+              type="email"
+              id="contactEmail"
+              placeholder="Your Email"
+              class="w-full p-3 bg-gray-200 text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <textarea
+              id="contactMessage"
+              placeholder="Your Message"
+              rows="4"
+              class="w-full p-3 bg-gray-200 text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+              required
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition-all duration-300"
+          >
+            Send Message
+          </button>
+        </form>
+        <button
+          id="closeContactForm"
+          class="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Chat Button -->
+    <button
+      id="liveChatButton"
+      class="live-chat-button bg-blue-900 text-white p-4 rounded-full shadow-lg hover:bg-blue-800 transition-all duration-300"
+    >
+      <i class="fas fa-comments text-xl"></i>
+    </button>
+
+    <!-- Live Chat Window -->
+    <div id="liveChatWindow" class="live-chat-window">
+      <div class="live-chat-header">
+        <span>Live Chat Support</span>
+        <button id="closeLiveChat" class="text-white">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <div id="liveChatBody" class="live-chat-body"></div>
+      <div class="live-chat-footer">
+        <input
+          type="text"
+          id="liveChatInput"
+          placeholder="Type your message..."
+          class="w-full p-2 bg-gray-200 text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+        />
+      </div>
+    </div>
+
+    <!-- Main Section with Background Image -->
+    <section
+      id="home"
+      class="pt-32 pb-16 px-6 bg-cover bg-center relative"
+      style="
+        background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+      "
+    >
+      <div class="absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 relative z-10"
+      >
+        <!-- Left Content -->
+        <div class="flex-1 animate-fadeIn">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">
+            We Are Always Here For You
+          </h1>
+          <p class="text-gray-200 mb-4">
+            FirstTrustBank started as a community-focused bank more than 140
+            years ago in Beloit, Wisconsin. Today, we’re still independently
+            owned and still dedicated to serving our local communities
+            throughout Southern Wisconsin and Northern Illinois, including
+            Beloit, Roscoe, Janesville, Monroe, Walworth, and the Stateline
+            area.
+          </p>
+          <p class="text-gray-200 mb-4">
+            We’re proud of our past, but even prouder of the great service we
+            offer our customers today and well into the future. When you or your
+            business bank with FirstTrustBank, you’ll get the expert advice you
+            need, including financial products and services tailored to your
+            situation.
+          </p>
+          <p class="text-gray-200 font-semibold">
+            A Banking Relationship You Can Depend On.
+          </p>
+          <!-- Feature Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="feature-card p-6 rounded-lg text-center">
+              <i class="fas fa-mobile-alt text-green-500 text-4xl mb-4"></i>
+              <h3 class="text-xl font-semibold mb-2">Mobile Check Deposit</h3>
+              <p class="text-sm">
+                Deposit your check without the trip to the bank! Use the camera
+                on your smartphone or tablet and our Mobile Banking App.
+              </p>
+            </div>
+            <div class="feature-card p-6 rounded-lg text-center">
+              <i class="fas fa-home text-yellow-500 text-4xl mb-4"></i>
+              <h3 class="text-xl font-semibold mb-2">
+                Apply Now For a Home Loan
+              </h3>
+              <p class="text-sm">
+                Ready to become a homeowner or refinance your mortgage? Whether
+                you’re a first-time homebuyer, building a custom home
+                construction, or refinancing your home, we have a solution
+                that’s right for you.
+              </p>
+            </div>
+            <div class="feature-card p-6 rounded-lg text-center">
+              <i class="fas fa-lightbulb text-blue-500 text-4xl mb-4"></i>
+              <h3 class="text-xl font-semibold mb-2">Sound Advice</h3>
+              <p class="text-sm">
+                Expand your financial knowledge today. Access our free online
+                money management program that explains critical concepts in a
+                series of 7-minute interactive segments.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Right Sidebar -->
+        <div
+          class="w-full md:w-80 space-y-6 animate-fadeIn"
+          style="animation-delay: 0.2s"
+        >
+          <!-- Login Section -->
+          <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold mb-4 flex items-center">
+              <i class="fas fa-lock mr-2 text-gray-600"></i> Log In to Online
+              Banking
+            </h3>
+            <form id="signinForm">
+              <div class="mb-4">
+                <div class="flex space-x-4 mb-2">
+                  <label class="flex items-center">
+                    <input
+                      type="radio"
+                      name="accountType"
+                      value="personal"
+                      class="mr-2"
+                      checked
+                    />
+                    Personal
+                  </label>
+                  <label class="flex items-center">
+                    <input
+                      type="radio"
+                      name="accountType"
+                      value="business"
+                      class="mr-2"
+                    />
+                    Business
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  class="w-full p-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  class="w-full p-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition-all duration-300"
+              >
+                Log In
+              </button>
+            </form>
+            <div class="mt-4 text-sm">
+              <a href="#" class="text-blue-900 hover:underline"
+                >New User Registration</a
+              >
+              |
+              <a href="#" class="text-blue-900 hover:underline"
+                >Forgot Password</a
+              >
+            </div>
+            <div class="mt-4">
+              <p class="text-gray-600 text-sm mb-2">
+                Download App for Smartphone
+              </p>
+              <p class="text-gray-600 text-sm mb-2">
+                Bank easier with our mobile app.
+              </p>
+              <div class="flex space-x-4">
+                <a href="#" class="inline-block">
+                  <img
+                    src="https://via.placeholder.com/120x40?text=App+Store"
+                    alt="App Store"
+                    class="h-10"
+                  />
+                </a>
+                <a href="#" class="inline-block">
+                  <img
+                    src="https://via.placeholder.com/120x40?text=Google+Play"
+                    alt="Google Play"
+                    class="h-10"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label for="additionalLogins" class="text-gray-600 text-sm"
+                >Additional Logins</label
+              >
+              <select
+                id="additionalLogins"
+                class="w-full p-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+              >
+                <option>Select...</option>
+                <option>Option 1</option>
+                <option>Option 2</option>
+              </select>
+            </div>
+          </div>
+          <!-- Location Finder -->
+          <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+            <h3 class="text-lg font-semibold mb-4 flex items-center">
+              <i class="fas fa-map-marker-alt mr-2 text-gray-600"></i> Find a
+              Location
+            </h3>
+            <div class="mb-4">
+              <input
+                type="text"
+                id="locationSearch"
+                placeholder="Enter city or zip code..."
+                class="w-full p-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 transition-all duration-300"
+              />
+            </div>
+            <button
+              id="findLocation"
+              class="w-full bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition-all duration-300"
+            >
+              Find a Location
+            </button>
+            <div id="map" class="mt-4"></div>
+            <div id="locationResults" class="mt-4 text-gray-600"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="py-16 px-6 gradient-section">
+      <h2 class="text-4xl font-bold text-center mb-12 animate-fadeIn">
+        Bank News & Updates
+      </h2>
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md animate-fadeIn">
+          <h3 class="text-xl font-semibold mb-2">Shred Day 2025</h3>
+          <p class="text-gray-600 mb-4">
+            Join us on April 15, 2025, for our annual Shred Day in Beloit, WI.
+            Safely dispose of sensitive documents and protect your identity.
+          </p>
+          <a href="#" class="text-blue-900 hover:underline">Learn More</a>
+        </div>
+        <div
+          class="bg-white p-6 rounded-lg shadow-md animate-fadeIn"
+          style="animation-delay: 0.2s"
+        >
+          <h3 class="text-xl font-semibold mb-2">New Branch Opening</h3>
+          <p class="text-gray-600 mb-4">
+            We’re excited to announce the opening of our new branch in
+            Janesville, WI, on May 1, 2025. Visit us for special promotions!
+          </p>
+          <a href="#" class="text-blue-900 hover:underline">Learn More</a>
+        </div>
+        <div
+          class="bg-white p-6 rounded-lg shadow-md animate-fadeIn"
+          style="animation-delay: 0.4s"
+        >
+          <h3 class="text-xl font-semibold mb-2">
+            Financial Literacy Workshop
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Attend our free financial literacy workshop on June 10, 2025, in
+            Roscoe, IL. Learn budgeting, saving, and more!
+          </p>
+          <a href="#" class="text-blue-900 hover:underline">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fraud Alerts Section -->
+    <section id="fraud-alerts" class="py-16 px-6 gradient-section">
+      <h2 class="text-4xl font-bold text-center mb-12 animate-fadeIn">
+        Fraud Alerts
+      </h2>
+      <div class="max-w-6xl mx-auto space-y-6">
+        <div class="bg-white p-6 rounded-lg shadow-md animate-fadeIn">
+          <h3 class="text-xl font-semibold mb-2">Beware of Live Chat Scams</h3>
+          <p class="text-gray-600 mb-4">
+            Scammers are targeting customers by posing as bank support through
+            fake live chat sites. These sites may install remote access software
+            on your device. Never allow remote access to your computer or share
+            one-time codes with unsolicited callers.
+          </p>
+          <a href="#" class="text-blue-900 hover:underline">Read More</a>
+        </div>
+        <div
+          class="bg-white p-6 rounded-lg shadow-md animate-fadeIn"
+          style="animation-delay: 0.2s"
+        >
+          <h3 class="text-xl font-semibold mb-2">SMS Phishing Alert</h3>
+          <p class="text-gray-600 mb-4">
+            We’ve detected fraudulent SMS messages claiming to be from
+            FirstBankTrust, asking you to click links or provide credentials.
+            Always access your banking through our official app or website,
+            never via links in messages.
+          </p>
+          <a href="#" class="text-blue-900 hover:underline">Read More</a>
+        </div>
+        <div
+          class="bg-white p-6 rounded-lg shadow-md animate-fadeIn"
+          style="animation-delay: 0.4s"
+        >
+          <h3 class="text-xl font-semibold mb-2">
+            Protect Yourself from Fake Calls
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Fraudsters may spoof our phone number to trick you into sharing
+            personal information. If you receive a suspicious call, hang up and
+            contact us directly at 800-667-4401 to verify.
+          </p>
+          <a href="#" class="text-blue-900 hover:underline">Read More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-12 px-6 shadow-md">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div class="col-span-1">
+          <div class="text-2xl font-bold text-blue-900 neon-shadow">
+            FirstTrustBank
+          </div>
+        </div>
+        <div>
+          <h4 class="text-gray-900 font-semibold mb-4">Personal</h4>
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="#personal"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Checking & Savings</a
+              >
+            </li>
+            <li>
+              <a
+                href="#personal"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Mortgage Loans</a
+              >
+            </li>
+            <li>
+              <a
+                href="#personal"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Debit Cards</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-gray-900 font-semibold mb-4">Business</h4>
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="#business"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Business Accounts</a
+              >
+            </li>
+            <li>
+              <a
+                href="#business"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Commercial Loans</a
+              >
+            </li>
+            <li>
+              <a
+                href="#business"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Merchant Services</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-gray-900 font-semibold mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li>
+              <a
+                href="#contact"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Contact Us</a
+              >
+            </li>
+            <li>
+              <a
+                href="#contact"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >FAQs</a
+              >
+            </li>
+            <li>
+              <a
+                href="#contact"
+                class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+                >Privacy Policy</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="flex justify-end space-x-4">
+          <a
+            href="https://facebook.com"
+            class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a
+            href="https://instagram.com"
+            class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+            ><i class="fab fa-instagram"></i
+          ></a>
+          <a
+            href="https://twitter.com"
+            class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+            ><i class="fab fa-x-twitter"></i
+          ></a>
+          <a
+            href="https://linkedin.com"
+            class="text-gray-600 hover:text-blue-900 transition-colors duration-300"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+        </div>
+      </div>
+      <div
+        class="max-w-6xl mx-auto mt-8 pt-6 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center text-gray-600 text-sm"
+      >
+        <div class="space-x-4 mb-4 md:mb-0">
+          <a href="#" class="hover:text-blue-900 transition-colors duration-300"
+            >Terms of Service</a
+          >
+          <a href="#" class="hover:text-blue-900 transition-colors duration-300"
+            >Privacy Policy</a
+          >
+        </div>
+        <p>
+          © 2025 FirstTrustBank. All rights reserved. Member FDIC | Equal
+          Housing Lender
+        </p>
+      </div>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+      // Notification System
+      function showNotification(message) {
+        const notificationContainer = document.getElementById(
+          "notificationContainer"
+        );
+        const notification = document.createElement("div");
+        notification.className = "notification animate-notificationSlideIn";
+        notification.innerHTML = `
+                <span>${message}</span>
+                <span class="notification-close">×</span>
+            `;
+        notificationContainer.appendChild(notification);
+
+        setTimeout(() => {
+          notification.classList.add("animate-fadeOut");
+          setTimeout(() => {
+            notification.remove();
+          }, 500);
+        }, 5000);
+
+        notification
+          .querySelector(".notification-close")
+          .addEventListener("click", () => {
+            notification.classList.add("animate-fadeOut");
+            setTimeout(() => {
+              notification.remove();
+            }, 500);
+          });
+      }
+
+      // Dark Mode Toggle
+      const darkModeToggle = document.getElementById("darkModeToggle");
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        darkModeToggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+      }
+
+      darkModeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        if (document.body.classList.contains("dark")) {
+          localStorage.setItem("theme", "dark");
+          darkModeToggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+        } else {
+          localStorage.setItem("theme", "light");
+          darkModeToggle.innerHTML = '<i class="fas fa-moon text-xl"></i>';
+        }
+      });
+
+      // Cookie Consent Logic
+      const cookieConsent = document.getElementById("cookieConsent");
+      const acceptCookies = document.getElementById("acceptCookies");
+
+      if (!localStorage.getItem("cookiesAccepted")) {
+        cookieConsent.style.display = "block";
+        cookieConsent.classList.add("animate-slideIn");
+        acceptCookies.focus();
+      }
+
+      acceptCookies.addEventListener("click", () => {
+        localStorage.setItem("cookiesAccepted", "true");
+        cookieConsent.classList.add("animate-fadeOut");
+        setTimeout(() => {
+          cookieConsent.style.display = "none";
+        }, 500);
+      });
+
+      cookieConsent.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && document.activeElement === acceptCookies) {
+          acceptCookies.click();
+        }
+      });
+
+      // Hamburger Menu Toggle
+      const hamburgerButton = document.getElementById("hamburgerButton");
+      const navLinksMobile = document.getElementById("navLinksMobile");
+      let isMenuOpen = false;
+
+      hamburgerButton.addEventListener("click", () => {
+        isMenuOpen = !isMenuOpen;
+        hamburgerButton.setAttribute("aria-expanded", isMenuOpen);
+        if (isMenuOpen) {
+          navLinksMobile.classList.remove("closed");
+          navLinksMobile.classList.add("open");
+          hamburgerButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+        } else {
+          navLinksMobile.classList.remove("open");
+          navLinksMobile.classList.add("closed");
+          hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+        }
+      });
+
+      document.querySelectorAll("#navLinksMobile a").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (isMenuOpen) {
+            isMenuOpen = false;
+            navLinksMobile.classList.remove("open");
+            navLinksMobile.classList.add("closed");
+            hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            hamburgerButton.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      // Contact Form Toggle
+      const contactButton = document.getElementById("contactButton");
+      const contactOverlay = document.getElementById("contactOverlay");
+      const closeContactForm = document.getElementById("closeContactForm");
+      const contactForm = document.getElementById("contactForm");
+
+      contactButton.addEventListener("click", () => {
+        contactOverlay.style.display = "flex";
+      });
+
+      closeContactForm.addEventListener("click", () => {
+        contactOverlay.style.display = "none";
+        contactForm.reset();
+      });
+
+      contactForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("contactName").value;
+        showNotification(`Thank you, ${name}! Your message has been sent.`);
+        contactOverlay.style.display = "none";
+        contactForm.reset();
+      });
+
+      // Simulated Online Banking Login
+      let user = JSON.parse(localStorage.getItem("user")) || null;
+
+      document.getElementById("signinForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = e.target[1].value;
+        const password = e.target[2].value;
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (
+          storedUser &&
+          storedUser.username === username &&
+          storedUser.password === password
+        ) {
+          showNotification("Logged in successfully!");
+        } else {
+          showNotification("Invalid username or password.");
+        }
+        e.target.reset();
+      });
+
+      // Google Maps Location Finder
+      let map;
+      let service;
+      let infowindow;
+
+      function initMap() {
+        const defaultLocation = { lat: 42.5083, lng: -89.0318 }; // Beloit, WI
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: defaultLocation,
+          zoom: 12,
+        });
+        infowindow = new google.maps.InfoWindow();
+        service = new google.maps.places.PlacesService(map);
+
+        // Preload a default location
+        searchLocations("FirstBankTrust near Beloit, WI");
+      }
+
+      document.getElementById("findLocation").addEventListener("click", () => {
+        const query = document.getElementById("locationSearch").value;
+        if (query) {
+          searchLocations(`FirstBankTrust near ${query}`);
+        } else {
+          showNotification("Please enter a city or zip code.");
+        }
+      });
+
+      function searchLocations(query) {
+        const request = {
+          query: query,
+          fields: ["name", "geometry", "formatted_address"],
+          type: ["bank"],
+        };
+
+        service.textSearch(request, (results, status) => {
+          if (
+            status === google.maps.places.PlacesServiceStatus.OK &&
+            results.length > 0
+          ) {
+            const bounds = new google.maps.LatLngBounds();
+            const resultsContainer = document.getElementById("locationResults");
+            resultsContainer.innerHTML = "";
+
+            results.forEach((place, index) => {
+              if (index < 3) {
+                // Limit to 3 results
+                const marker = new google.maps.Marker({
+                  position: place.geometry.location,
+                  map: map,
+                  title: place.name,
+                });
+
+                marker.addListener("click", () => {
+                  infowindow.setContent(
+                    `<div><strong>${place.name}</strong><br>${place.formatted_address}</div>`
+                  );
+                  infowindow.open(map, marker);
+                });
+
+                bounds.extend(place.geometry.location);
+
+                const resultDiv = document.createElement("div");
+                resultDiv.className = "mt-2";
+                resultDiv.innerHTML = `<strong>${place.name}</strong><br>${place.formatted_address}`;
+                resultsContainer.appendChild(resultDiv);
+              }
+            });
+
+            map.fitBounds(bounds);
+            showNotification(`Found ${results.length} locations near ${query}`);
+          } else {
+            showNotification(
+              "No locations found. Please try a different search."
+            );
+          }
+        });
+      }
+
+      // Initialize the map when the page loads
+      window.onload = initMap;
+
+      // Live Chat Functionality
+      const liveChatButton = document.getElementById("liveChatButton");
+      const liveChatWindow = document.getElementById("liveChatWindow");
+      const closeLiveChat = document.getElementById("closeLiveChat");
+      const liveChatBody = document.getElementOf("liveChatBody");
+      const liveChatInput = document.getElementById("liveChatInput");
+
+      liveChatButton.addEventListener("click", () => {
+        liveChatWindow.style.display = "flex";
+        if (!liveChatBody.innerHTML) {
+          addChatMessage("bot", "Hello! How can I assist you today?");
+        }
+        liveChatInput.focus();
+      });
+
+      closeLiveChat.addEventListener("click", () => {
+        liveChatWindow.style.display = "none";
+      });
+
+      liveChatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && liveChatInput.value.trim()) {
+          const message = liveChatInput.value.trim();
+          addChatMessage("user", message);
+          liveChatInput.value = "";
+
+          // Simulate bot response
+          setTimeout(() => {
+            if (message.toLowerCase().includes("hours")) {
+              addChatMessage(
+                "bot",
+                "Our branches are open Monday to Friday, 9 AM to 5 PM, and Saturday, 9 AM to 12 PM. How else can I help you?"
+              );
+            } else if (message.toLowerCase().includes("account")) {
+              addChatMessage(
+                "bot",
+                "I can help with account inquiries! Please provide more details, or you can log in to your online banking for more information."
+              );
+            } else {
+              addChatMessage(
+                "bot",
+                "I’m here to help! Can you please provide more details or ask about something specific, like branch hours or account services?"
+              );
+            }
+          }, 1000);
+        }
+      });
+
+      function addChatMessage(sender, message) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `chat-message ${sender}`;
+        messageDiv.textContent = message;
+        liveChatBody.appendChild(messageDiv);
+        liveChatBody.scrollTop = liveChatBody.scrollHeight;
+      }
+
+      // Button Click Animation
+      document.querySelectorAll('button[type="submit"]').forEach((btn) => {
+        btn.addEventListener("click", () => {
+          btn.classList.add("animate-bounce");
+        });
+      });
+
+      document.querySelectorAll("#findLocation").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          btn.classList.add("animate-bounce");
+        });
+      });
+    </script>
+  </body>
+</html>
