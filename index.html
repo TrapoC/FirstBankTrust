@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FirstTrustBank - Community Banking Services</title>
+    <link rel="stylesheet" href="./styles.css" />
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for Icons -->
@@ -15,7 +16,7 @@
       referrerpolicy="no-referrer"
     />
     <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=REPLACE_WITH_YOUR_VALID_API_KEY&libraries=places"></script>
     <!-- Custom Styles -->
     <style>
       @keyframes fadeIn {
@@ -278,22 +279,28 @@
       }
 
       /* Navbar Styles */
-      .top-bar {
-        background: #1e3a8a;
-        color: white;
-        padding: 0.5rem 1.5rem;
-        font-size: 0.9rem;
-      }
-
-      .main-nav {
-        background: #1e3a8a;
-        color: white;
-        padding: 1rem 1.5rem;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 10;
-      }
+            .top-bar {
+              background: #1e3a8a;
+              color: white;
+              padding: 0.5rem 1.5rem;
+              font-size: 0.9rem;
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              z-index: 40;
+            }
+      
+            .main-nav {
+              background: #1e3a8a;
+              color: white;
+              padding: 1rem 1.5rem;
+              position: fixed;
+              top: 2.5rem;
+              left: 0;
+              width: 100%;
+              z-index: 30;
+            }
 
       .nav-links-desktop a {
         position: relative;
@@ -475,8 +482,29 @@
         color: #1f2937;
       }
 
-      body.dark .online-banking-btn:hover {
-        background: #eab308;
+      /* Mobile Navigation Styles */
+      .nav-links-mobile {
+        position: fixed;
+        top: 0;
+        right: -100%; /* Start off-screen */
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: #1e3a8a;
+        padding-top: 80px;
+        transition: right 0.3s ease-in-out;
+        z-index: 35;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links-mobile.open {
+        right: 0;
+      }
+
+      /* Hamburger Button */
+      .hamburger-button {
+        position: relative;
+        z-index: 50;
       }
     </style>
   </head>
@@ -541,15 +569,9 @@
           FirstTrustBank
         </div>
       </div>
-      <button
-        id="hamburgerButton"
-        class="hamburger-button text-white focus:outline-none"
-        aria-expanded="false"
-        aria-controls="navLinksMobile"
-      >
-        <i class="fas fa-bars text-2xl"></i>
-      </button>
-      <div class="nav-links-desktop flex items-center space-x-6">
+
+      <!-- Desktop Navigation -->
+      <div class="nav-links-desktop hidden md:flex items-center space-x-6">
         <a href="#personal" class="text-white hover:text-gray-300"
           >Personal <i class="fas fa-chevron-down text-xs ml-1"></i
         ></a>
@@ -579,39 +601,51 @@
           ><i class="fas fa-search"></i
         ></a>
       </div>
-      <div
-        id="navLinksMobile"
-        class="nav-links-mobile nav-links closed absolute top-[120px] left-0 w-64 bg-blue-900 flex flex-col space-y-4 p-6 transform"
+
+      <!-- Hamburger Button -->
+      <button
+        id="hamburgerButton"
+        class="hamburger-button text-white focus:outline-none md:hidden"
+        aria-expanded="false"
+        aria-controls="navLinksMobile"
       >
-        <a href="#personal" class="text-white hover:text-gray-300"
-          >Personal <i class="fas fa-chevron-down text-xs ml-1"></i
-        ></a>
-        <a href="#business" class="text-white hover:text-gray-300"
-          >Business <i class="fas fa-chevron-down text-xs ml-1"></i
-        ></a>
-        <a href="#wealth" class="text-white hover:text-gray-300"
-          >Wealth <i class="fas fa-chevron-down text-xs ml-1"></i
-        ></a>
-        <a href="#sound-advice" class="text-white hover:text-gray-300"
-          >Sound Advice <i class="fas fa-chevron-down text-xs ml-1"></i
-        ></a>
-        <a href="#about-us" class="text-white hover:text-gray-300"
-          >About Us <i class="fas fa-chevron-down text-xs ml-1"></i
-        ></a>
-        <a href="#open-account" class="text-white hover:text-gray-300"
-          >Open Account</a
-        >
-        <a href="#apply-loan" class="text-white hover:text-gray-300"
-          >Apply for Loan</a
-        >
-        <a href="#locations" class="text-white hover:text-gray-300"
-          >Locations</a
-        >
-        <a href="#search" class="text-white hover:text-gray-300"
-          ><i class="fas fa-search"></i> Search</a
-        >
-      </div>
+        <i class="fas fa-bars text-2xl"></i>
+      </button>
     </nav>
+
+    <!-- Mobile Navigation (moved outside nav) -->
+    <div id="navLinksMobile" class="nav-links-mobile">
+      <div class="px-6 py-4 space-y-4">
+        <a href="#personal" class="text-white hover:text-gray-300 block">
+          Personal <i class="fas fa-chevron-down text-xs ml-1"></i>
+        </a>
+        <a href="#business" class="text-white hover:text-gray-300 block">
+          Business <i class="fas fa-chevron-down text-xs ml-1"></i>
+        </a>
+        <a href="#wealth" class="text-white hover:text-gray-300 block">
+          Wealth <i class="fas fa-chevron-down text-xs ml-1"></i>
+        </a>
+        <a href="#sound-advice" class="text-white hover:text-gray-300 block">
+          Sound Advice <i class="fas fa-chevron-down text-xs ml-1"></i>
+        </a>
+        <a href="#about-us" class="text-white hover:text-gray-300 block">
+          About Us <i class="fas fa-chevron-down text-xs ml-1"></i>
+        </a>
+        <div class="border-t border-gray-600 my-4"></div>
+        <a href="#open-account" class="text-white hover:text-gray-300 block">
+          Open Account
+        </a>
+        <a href="#apply-loan" class="text-white hover:text-gray-300 block">
+          Apply for Loan
+        </a>
+        <a href="#locations" class="text-white hover:text-gray-300 block">
+          Locations
+        </a>
+        <a href="#search" class="text-white hover:text-gray-300 block">
+          <i class="fas fa-search"></i> Search
+        </a>
+      </div>
+    </div>
 
     <!-- Contact Button -->
     <button
@@ -1189,26 +1223,45 @@
 
       hamburgerButton.addEventListener("click", () => {
         isMenuOpen = !isMenuOpen;
-        hamburgerButton.setAttribute("aria-expanded", isMenuOpen);
+        hamburgerButton.setAttribute("aria-expanded", isMenuOpen.toString());
+      
         if (isMenuOpen) {
-          navLinksMobile.classList.remove("closed");
           navLinksMobile.classList.add("open");
+          navLinksMobile.classList.remove("closed");
           hamburgerButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+          document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
         } else {
           navLinksMobile.classList.remove("open");
           navLinksMobile.classList.add("closed");
           hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+          document.body.style.overflow = ""; // Restore scrolling
         }
       });
 
+      // Close menu when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          isMenuOpen &&
+          !navLinksMobile.contains(e.target) &&
+          !hamburgerButton.contains(e.target)
+        ) {
+          isMenuOpen = false;
+          navLinksMobile.classList.remove("open");
+          hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+          hamburgerButton.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+        }
+      });
+
+      // Close menu when clicking on a link
       document.querySelectorAll("#navLinksMobile a").forEach((link) => {
         link.addEventListener("click", () => {
           if (isMenuOpen) {
             isMenuOpen = false;
             navLinksMobile.classList.remove("open");
-            navLinksMobile.classList.add("closed");
             hamburgerButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
             hamburgerButton.setAttribute("aria-expanded", "false");
+            document.body.style.overflow = "";
           }
         });
       });
@@ -1341,7 +1394,7 @@
       const liveChatButton = document.getElementById("liveChatButton");
       const liveChatWindow = document.getElementById("liveChatWindow");
       const closeLiveChat = document.getElementById("closeLiveChat");
-      const liveChatBody = document.getElementOf("liveChatBody");
+      const liveChatBody = document.getElementById("liveChatBody");
       const liveChatInput = document.getElementById("liveChatInput");
 
       liveChatButton.addEventListener("click", () => {
